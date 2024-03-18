@@ -25,7 +25,7 @@ import { styles } from './assets.js';
         <h2>Restaurantbot</h2>
         <span class="close-btn material-symbols-outlined">close</span>
       </header>
-      <ul class="chatbox">
+      <ul class="chatbox" style="height: 460px;">
         <li class="chat incoming">
           <span class="material-symbols-outlined" style="background:${config.chatbotColor};  width: 35px; height: 35px; cursor: default; line-height: 36px; align-self: flex-end; border-radius: 4px; margin: 0 10px 7px 0;">smart_toy</span>
           <p>${config.welcomeMessage}</p>
@@ -58,7 +58,7 @@ var thinking = window.chatbotConfig.thinkingMessage;
 
 ws.onopen = function(e) {
     console.log("[open] Connection established");
-    console.log("Sending the server hostname");
+    //console.log("Sending the server hostname");
     ws.send(location.hostname);
   };
   
@@ -137,7 +137,11 @@ ws.onmessage = function(event) {
     const lastMessageElement = chatbox.lastElementChild.querySelector("p");
 
     // Check if the data from the server is a button
-    if (data.type === 'button') {
+    if (data.type === 'buttonResponse') {
+      // Append the server's response to the chatbox as an incoming message
+      chatbox.appendChild(createChatLi(data.text, "incoming"));
+      chatbox.scrollTo(0, chatbox.scrollHeight);
+    } else if (data.type === 'button') {
         // Create a button element
         let btn = document.createElement('button');
         btn.textContent = data.text;
@@ -152,6 +156,36 @@ ws.onmessage = function(event) {
         btn.style.fontSize = '12px';
         btn.style.margin = '4px 2px';
         btn.style.cursor = 'pointer'; // Cursor pointer on hover
+        host: location.hostname,
+
+      btn.onclick = function() {
+        // Send a message back to Node-RED when the button is clicked
+        ws.send(JSON.stringify({ action: data.action, text: data.text, host: location.hostname }));
+    
+        // Append the button's text to the chatbox as an outgoing message
+        chatbox.appendChild(createChatLi(data.text, "outgoing"));
+        chatbox.scrollTo(0, chatbox.scrollHeight);
+    };
+
+        // Append the button to the chatbox
+        chatbox.appendChild(btn);
+
+    } else if (data.type === 'fdbutton') {
+        // Create a button element
+        let btn = document.createElement('button');
+        btn.textContent = data.text;
+        btn.style.backgroundColor = config.chatbotColor; // Same color as the avatar
+        btn.style.color = 'white'; // White text
+        btn.style.borderRadius = '12px'; // Rounded corners
+        btn.style.border = 'none'; // No border
+        btn.style.padding = '10px 20px'; // Padding
+        btn.style.textAlign = 'center'; // Centered text
+        btn.style.textDecoration = 'none'; // No underline
+        btn.style.display = 'inline-block';
+        btn.style.fontSize = '12px';
+        btn.style.margin = '4px 2px';
+        btn.style.cursor = 'pointer'; // Cursor pointer on hover
+        host: location.hostname,
         btn.onclick = function() {
             // Send a message back to Node-RED when the button is clicked
             ws.send(JSON.stringify({ action: data.action }));
@@ -159,13 +193,16 @@ ws.onmessage = function(event) {
 
         // Append the button to the chatbox
         chatbox.appendChild(btn);
-    } else if (data.type === 'message') {
+
+  } else if (data.type === 'message') {
         // Create a new paragraph element
-        let p = document.createElement('p');
-        p.textContent = data.text;
-        // p.style.fontSize = '12px';
-        // Append the paragraph to the chatbox
-        chatbox.appendChild(p);
+        // let p = document.createElement('p');
+        // p.textContent = data.text;
+        // p.style.fontSize = '20px';
+        // // Append the paragraph to the chatbox
+        // chatbox.appendChild(p);'
+        chatbox.appendChild(createChatLi(data.text, "incoming"));
+        chatbox.scrollTo(0, chatbox.scrollHeight);
     } else {
         // Handle text message
         if (lastMessageElement) {

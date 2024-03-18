@@ -16,8 +16,8 @@ body {
 .chatbot-toggler {
   outline: none;
   border: none;
-  height: 80px;
-  width: 80px;
+  height: 90px;
+  width: 90px;
   display: flex;
   cursor: pointer;
   align-items: center;
@@ -26,6 +26,13 @@ body {
   // background: #724ae8;
   transition: all 0.2s ease;
 }
+.chatbot-toggler img {
+  width: 90px;
+  height: 90px;
+  top: 0px; /* Adjust this value as needed */
+  left: 0px; /* Adjust this value as needed */
+  }
+
 body.show-chatbot .chatbot-toggler {
   transform: rotate(360deg);
 }
@@ -43,7 +50,7 @@ body.show-chatbot .chatbot-toggler span:last-child {
 .chatbot {
   position: fixed;
   right: 35px;
-  bottom: 70px;
+  bottom: 35px;
   width: 400px;
   background: #fff;
   border-radius: 15px;
@@ -82,7 +89,7 @@ header h2 {
 }
 .chatbot .chatbox {
   overflow-y: auto;
-  height: 420px;
+  // height: 460px;
   padding: 30px 30px 120px;
 }
 .chatbot :where(.chatbox, textarea)::-webkit-scrollbar {
@@ -118,9 +125,9 @@ header h2 {
 }
 .chatbox .chat p {
   white-space: pre-wrap;
-  padding: 16px 25px;
+  padding: 12px 16px;
   border-radius: 10px 10px 0 10px;
-  max-width: 80%;
+  max-width: 75%;
   color: #fff;
   // font-size: 0.95rem;
   // background: #724ae8;
@@ -141,6 +148,7 @@ header h2 {
 }
 .chatbot .chat-input {
   display: flex; 
+  gap: 5px;
   position: absolute;
   bottom: 0px;
   width: 100%;
@@ -155,7 +163,7 @@ header h2 {
   outline: none;
   resize: none;
   max-height: 180px;
-  padding: 10px 5px 0px 0;
+  padding: 15px 15px 15px 0;
   font-size: 0.95rem;
 }
 .chat-input span {
@@ -181,12 +189,12 @@ header h2 {
     right: 0;
     bottom: 0;
     height: 100%;
-    border-radius: 4px;
+    border-radius: 0px;
     width: 100%;
   }
   .chatbot .chatbox {
     height: 90%;
-    width: 375px;
+    // width: 375px;
     padding: 25px 15px 100px;
   }
   .chatbot .chat-input {
@@ -196,12 +204,7 @@ header h2 {
     display: block;
   }
 }
-.chatbot-toggler img {
-  width: 80px;
-  height: 80px;
-  top: 0px; /* Adjust this value as needed */
-  left: 0px; /* Adjust this value as needed */
-  }
+
 .footer {
   position: absolute; /* Add this */
   bottom: 0; /* Add this */
